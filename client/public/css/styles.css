@@ -1,0 +1,23 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
+#root {
+  height: 1000px;
+}
+.fa-google:before {
+  font-size: 30px;
+  margin-left: 5px;
+}
+.fa-youtube:before {
+  font-size: 30px;
+  margin-left: 5px;
+}
+
+.sign-up-button {
+  text-align: center;
+  margin: 10px;
+  width: 200px;
+}
