@@ -1,43 +1,6 @@
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
-const User = require("../models/user");
-
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://localhost:3000/auth/google/callback"
-    },
-
-    function(accessToken, refreshToken, profile, cb) {
-      process.nextTick(function() {
-        User.findOrCreate({ "google.id": profile.id }, function(err, user) {
-          if (err) return done(err);
-
-          if (user) {
-            // if a user is found, log them in
-            return done(null, user);
-          } else {
-            // if the user isnt in our database, create a new user
-            var newUser = new User();
-
-            // set all of the relevant information
-            newUser.google.id = profile.id;
-            newUser.google.token = token;
-            newUser.google.name = profile.displayName;
-            newUser.google.email = profile.emails[0].value; // pull the first email
-
-            // save the user
-            newUser.save(function(err) {
-              if (err) throw err;
-              return done(null, newUser);
-            });
-          }
-        });
-      });
-    }
-  )
-);
+const passport = require("passport");
+const GoogleStrategy = require("./googleStrategy");
+const User = require("../db/models/user");
 
 passport.serializeUser((user, done) => {
   console.log("=== serialize ... called ===");
@@ -61,7 +24,7 @@ passport.deserializeUser((id, done) => {
 });
 
 // ==== Register Strategies ====
-passport.use(LocalStrategy);
-//passport.use(GoogleStratgey);
+
+passport.use(GoogleStrategy);
 
 module.exports = passport;
